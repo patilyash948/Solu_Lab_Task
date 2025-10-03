@@ -4,3 +4,4 @@ openai
 scikit-learn
 pandas
 python-dotenv
+torch
