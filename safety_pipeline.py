@@ -1,25 +1,9 @@
-"""
-AI Safety POC Streamlit App with Labels, Metrics, and Confusion Matrix
-Filename: ai_safety_poc_app_labels_metrics.py
-
-Features:
-- Abuse detection
-- Crisis detection (heuristic)
-- Escalation detection
-- Content filtering based on age
-- LLM-generated assistant responses
-- Labels displayed in bold above each assistant message
-- Model evaluation with precision, recall, F1-score, accuracy, confusion matrix
-"""
-import torch
 import os
 import streamlit as st
 from typing import List, Tuple, Dict, Any
 from transformers import pipeline
 import openai
 import json
-import pandas as pd
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 # ----------------------------
 # Config
@@ -179,26 +163,62 @@ def chatbot_response(user_msg: str, user_age: int, history: List[Tuple[str, str]
 # ----------------------------
 # Streamlit UI
 # ----------------------------
-st.title("🤖 AI Safety POC — Chat Simulator with Labels & Metrics")
+st.title("🤖 AI Safety POC — Chat Simulator with Labels")
 st.write("Abuse, crisis, and escalation detection enabled. General queries get SAFE label.")
 
-# Sidebar: User settings & evaluation
-st.sidebar.header("Settings & Evaluation")
+# User settings
 user_age = st.sidebar.number_input("Your age", min_value=10, max_value=100, value=18)
 show_meta = st.sidebar.checkbox("Show debug meta", value=False)
 
-# Evaluation Section
-st.sidebar.subheader("Model Evaluation Metrics")
+# Initialize chat history
+if "history" not in st.session_state:
+    st.session_state.history = []
 
-# Sample dataset for evaluation
-sample_data = [
-    ("I hate this!", "TOXIC", "NEGATIVE", "HATE"),
-    ("Amazing work!", "NON_TOXIC", "POSITIVE", "NON_HATE"),
-    ("You are stupid", "TOXIC", "NEGATIVE", "NON_HATE"),
-    ("I love it!", "NON_TOXIC", "POSITIVE", "NON_HATE"),
-    ("I want to kill myself", "NON_TOXIC", "NEGATIVE", "NON_HATE")
-]
+# Chat input
+user_input = st.chat_input("Type a message...")
+if user_input:
+    st.session_state.history.append((user_input, None))
 
-def evaluate_models(data):
-    true_abuse, pred_abuse = [], []
-   
+# Render chat with labels in bold
+for i, (u_msg, b_msg) in enumerate(st.session_state.history):
+    with st.chat_message("user"):
+        st.markdown(u_msg)
+
+    if b_msg is None:
+        with st.chat_message("assistant"):
+            placeholder = st.empty()
+            placeholder.markdown("...thinking")
+            bot_resp = chatbot_response(
+                u_msg,
+                user_age,
+                [(um, bm.get("message") if isinstance(bm, dict) else bm) for um, bm in st.session_state.history if um]
+            )
+            # Show label in bold above message
+            label_text = f"**Label: {bot_resp.get('type', 'SAFE')}**"
+            placeholder.markdown(f"{label_text}\n\n{bot_resp['message']}")
+            st.session_state.history[i] = (u_msg, bot_resp)
+    else:
+        with st.chat_message("assistant"):
+            label_text = f"**Label: {b_msg.get('type', 'SAFE')}**" if isinstance(b_msg, dict) else ""
+            st.markdown(f"{label_text}\n\n{b_msg.get('message') if isinstance(b_msg, dict) else str(b_msg)}")
+
+    if show_meta and isinstance(b_msg, dict):
+        with st.expander("Debug meta"):
+            st.json(b_msg.get("meta", {}))
+
+# Sidebar controls
+st.sidebar.markdown("---")
+if st.sidebar.button("Clear chat"):
+    st.session_state.history = []
+    st.experimental_rerun()
+
+if st.sidebar.button("Export chat (JSON)"):
+    js = json.dumps([
+        {"user": u, "assistant": (b.get("message") if isinstance(b, dict) else b),
+         "meta": (b.get("meta") if isinstance(b, dict) else {})}
+        for u, b in st.session_state.history
+    ], indent=2)
+    st.download_button("Download conversation JSON", js, file_name="conversation.json", mime="application/json")
+
+st.markdown("---")
+st.markdown("**Note:** Crisis detection is heuristic. Replace with trained models for production use.")
