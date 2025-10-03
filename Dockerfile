@@ -29,4 +29,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8501
 
 # Streamlit specific command to run the app
-CMD ["streamlit", "run", "ai_safety_poc_app_labels_metrics.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "safety_pipeline.py", "--server.port=8501", "--server.address=0.0.0.0"]
