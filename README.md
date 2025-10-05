@@ -70,7 +70,7 @@ Analyzes the last few user messages to identify increasing negativity or toxic l
 
 If escalation is detected, the AI responds calmly to de-escalate the conversation.
 
-**🔞 4. Age-Based Content Filtering
+**🔞 4. Age-Based Content Filtering**
 
 Blocks content labeled as hate speech if the user’s age is below 18.
 
