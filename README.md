@@ -42,20 +42,10 @@ export OPENAI_API_KEY=your-api-key
 Run the App
 
 streamlit run safety_pipeline.py
-Model Details
-Task	Model
 
-Sentiment	distilbert-base-uncased-finetuned-sst-2-english
-Abuse/Toxicity	unitary/toxic-bert (fallbacks to sentiment model if loading fails)
-Hate Speech Filter	facebook/roberta-hate-speech-dynabench-r4-target (optional)
-Chat Completion	gpt-3.5-turbo via OpenAI API
-
-.
-├── safety_pipeline.py       # Main Streamlit app
-├── requirements.txt         # Python dependencies
-└── README.md                # Project description
 
 How It Works
+
 🔍 1. Sentiment, Abuse & Hate Speech Detection
 
 Loads Hugging Face pipelines for:
