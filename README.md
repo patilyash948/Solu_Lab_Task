@@ -56,11 +56,51 @@ Chat Completion	gpt-3.5-turbo via OpenAI API
 └── README.md                # Project description
 
 How It Works
+🔍 1. Sentiment, Abuse & Hate Speech Detection
 
-Loads Hugging Face pipelines for sentiment, abuse, and hate speech detection.
-Uses heuristic crisis keyword detection and sentiment analysis.
-Detects conversation escalation by analyzing recent user messages.
-Filters content based on user age.
-Sends conversation history and prompts to OpenAI GPT-3.5-turbo to generate responses.
-Labels each response with a type: SAFE, CRISIS, ABUSE, or ESCALATION
+Loads Hugging Face pipelines for:
+
+Sentiment analysis (distilbert-base-uncased-finetuned-sst-2-english)
+
+Abuse detection (unitary/toxic-bert)
+
+Hate speech detection (facebook/roberta-hate-speech-dynabench-r4-target)
+
+Fallback logic: if a model fails to load, the system defaults to a simpler one.
+
+🚨 2. Crisis Detection
+
+Uses heuristic keyword matching (e.g., "suicide", "want to die") and strong negative sentiment to detect potential mental health crises.
+
+If detected, the system prompts the AI to respond with empathy and encourage help-seeking behavior.
+
+📈 3. Escalation Detection
+
+Analyzes the last few user messages to identify increasing negativity or toxic language.
+
+If escalation is detected, the AI responds calmly to de-escalate the conversation.
+
+🔞 4. Age-Based Content Filtering
+
+Blocks content labeled as hate speech if the user’s age is below 18.
+
+Ensures safer interactions for younger users.
+
+🤖 5. Response Generation with GPT-3.5
+
+Uses OpenAI’s GPT-3.5-turbo to generate assistant replies.
+
+Includes system prompts tailored to the context (e.g., safe, abusive, crisis, escalating).
+
+🏷️ 6. Response Labeling
+
+Each response is labeled as one of:
+
+SAFE — Normal conversation
+
+ABUSE — Toxic or abusive language detected
+
+CRISIS — Potential mental health crisis
+
+ESCALATION — Increasing negativity/toxicity
 
