@@ -32,7 +32,7 @@ This project is a Proof-of-Concept (POC) AI chatbot designed to demonstrate real
 
 ### 1. Clone the repository
 
-2. Install dependencies
+**2. Install dependencies**
 
     pip install -r requirements.txt
 
@@ -46,7 +46,7 @@ streamlit run safety_pipeline.py
 
 How It Works
 
-🔍 1. Sentiment, Abuse & Hate Speech Detection
+**🔍 1. Sentiment, Abuse & Hate Speech Detection**
 
 Loads Hugging Face pipelines for:
 
@@ -58,31 +58,31 @@ Hate speech detection (facebook/roberta-hate-speech-dynabench-r4-target)
 
 Fallback logic: if a model fails to load, the system defaults to a simpler one.
 
-🚨 2. Crisis Detection
+**🚨 2. Crisis Detection**
 
 Uses heuristic keyword matching (e.g., "suicide", "want to die") and strong negative sentiment to detect potential mental health crises.
 
 If detected, the system prompts the AI to respond with empathy and encourage help-seeking behavior.
 
-📈 3. Escalation Detection
+**📈 3. Escalation Detection**
 
 Analyzes the last few user messages to identify increasing negativity or toxic language.
 
 If escalation is detected, the AI responds calmly to de-escalate the conversation.
 
-🔞 4. Age-Based Content Filtering
+**🔞 4. Age-Based Content Filtering
 
 Blocks content labeled as hate speech if the user’s age is below 18.
 
 Ensures safer interactions for younger users.
 
-🤖 5. Response Generation with GPT-3.5
+**🤖 5. Response Generation with GPT-3.5**
 
 Uses OpenAI’s GPT-3.5-turbo to generate assistant replies.
 
 Includes system prompts tailored to the context (e.g., safe, abusive, crisis, escalating).
 
-🏷️ 6. Response Labeling
+**🏷️ 6. Response Labeling**
 
 Each response is labeled as one of:
 
