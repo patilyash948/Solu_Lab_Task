@@ -36,7 +36,7 @@ This project is a Proof-of-Concept (POC) AI chatbot designed to demonstrate real
 
     pip install -r requirements.txt
 
-Add your OpenAI API key
+Add your OpenAI API key in .env file
 export OPENAI_API_KEY=your-api-key
 
 Run the App
@@ -55,5 +55,12 @@ Chat Completion	gpt-3.5-turbo via OpenAI API
 ├── requirements.txt         # Python dependencies
 └── README.md                # Project description
 
+How It Works
 
+Loads Hugging Face pipelines for sentiment, abuse, and hate speech detection.
+Uses heuristic crisis keyword detection and sentiment analysis.
+Detects conversation escalation by analyzing recent user messages.
+Filters content based on user age.
+Sends conversation history and prompts to OpenAI GPT-3.5-turbo to generate responses.
+Labels each response with a type: SAFE, CRISIS, ABUSE, or ESCALATION
 
