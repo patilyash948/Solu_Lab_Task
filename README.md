@@ -56,6 +56,4 @@ Chat Completion	gpt-3.5-turbo via OpenAI API
 └── README.md                # Project description
 
 
-4. 
-git clone https://github.com/patilyash948/Solu_Lab_Task.git
-cd Solu_Lab_Ta
+
